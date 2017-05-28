@@ -88,8 +88,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'online_auction_system',
-        'USER': 'root',
-        'PASSWORD': 'leanest#',
+        'USER': 'ironman',
+        'PASSWORD': 'xyz',
         'HOST': 'localhost',
         'OPTIONS': {
             'autocommit': True,
@@ -153,8 +153,8 @@ STATICFILES_DIRS = (
 
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ravalibk@gmail.com'
-EMAIL_HOST_PASSWORD = 'leanest#'
+EMAIL_HOST_USER = 'abc@gmail.com'
+EMAIL_HOST_PASSWORD = 'xyz'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
