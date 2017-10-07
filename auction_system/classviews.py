@@ -1,15 +1,15 @@
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.conf.urls import url
-from models import *
 from django.views.generic.edit import UpdateView, CreateView
 from django.core.urlresolvers import reverse
 from django.views.generic.edit import DeleteView
 from django.views.generic.edit import FormView
-from auction_system.forms import *
-from django.http import *
+from auction_system.forms import UserCreateForm
 from django.contrib.auth import authenticate, login, logout
-from forms import UserCreateForm
+from django.contrib.auth.models import User
+from .models import Product, Seller, Bidder
+from .forms import UserCreateForm
 
 class ProductView(ListView):
     model=Product

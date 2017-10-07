@@ -1,14 +1,12 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 import auction_system.views
-from classviews import *
+from .classviews import BidderListView, ProductDelete, UserCreateView
+from .classviews import ProductDetailView, AddProductView, ProductView
 from django.contrib.auth.decorators import login_required
 from django.conf.urls.static import static
 from django.conf import settings
-
-
-
-
+from django.contrib.auth.views import logout_then_login
 
 urlpatterns = [
     url(r'^$', auction_system.views.index, name="index"),
@@ -19,7 +17,7 @@ urlpatterns = [
     url(r'^register_user/', UserCreateView.as_view(), name="register"),
     url(r'^deleteproduct/(?P<pk>[0-9]+)', login_required(ProductDelete.as_view()), name="delete_product"),
     url(r'^bidderlist/(?P<pk>[0-9]+)', login_required(BidderListView.as_view()), name="bidder_list"),
-    url(r'^logout/', 'django.contrib.auth.views.logout_then_login')
+    url(r'^logout/', logout_then_login, name='logout')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
