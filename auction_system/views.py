@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
-from classviews import *
+# from classviews import *
 import datetime
 from django.db.models import Max
 import smtplib
@@ -12,12 +12,10 @@ import os
 import django
 from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
-
-#https://accounts.google.com/DisplayUnlockCaptcha
-
-sys.path.append("C:/Users/NIcky Koganti/PycharmProjects/online_acuction_system")
-os.environ["DJANGO_SETTINGS_MODULE"]="online_auction_system.settings"
-django.setup()
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from .models import Product, Bidder, Seller
 
 def mailing(bidder, seller):
     template = loader.get_template("auction_system/college_mail.html")

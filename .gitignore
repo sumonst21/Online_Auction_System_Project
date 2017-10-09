@@ -1,4 +1,7 @@
-venv
+*.swp
 *.pyc
+venv
 staticfiles
-.env
+secrets.json
+media/auction_system/*
+!media/auction_system/keep

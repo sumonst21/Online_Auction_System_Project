@@ -46,6 +46,3 @@ Here buyer and seller are sub classes of person.
 1. Person   {person_id, first_name, last_name, address, contact, password} 
 2. Seller   {selling_details}
 3. Buyer   {purchase_details}
-4. Goods   {good_id, good_name, category, seller_id} 
-5. Sold Goods  {purchaser_id, target_price, sold_price, date} 
-6. Progress Goods  {purchaser_id, auction_rate, auction_date}

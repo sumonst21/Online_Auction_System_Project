@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from time import time
 
-from django.core.validators import *
+from django.core.validators import RegexValidator
 
 # Create your models here.
 from django.template.context_processors import request
@@ -34,7 +34,7 @@ class Seller(models.Model):
     product_id = models.ForeignKey(Product)
 
     def __unicode__(self):
-        return unicode(self.user_name)
+        return str(self.user_name)
 
 class Bidder(models.Model):
     numeric = RegexValidator(r'^[0-9]*$', 'Only numerics are allowed.')
@@ -46,5 +46,5 @@ class Bidder(models.Model):
     bid_amount = models.CharField(max_length=255, validators=[numeric])
 
     def __unicode__(self):
-        return unicode(self.user_name)
+        return str(self.user_name)
 

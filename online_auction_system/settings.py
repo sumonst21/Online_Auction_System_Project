@@ -10,8 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
+import json
 import os
 import dj_database_url
+
+from django.core.exceptions import ImproperlyConfigured
+
+with open('secrets.json') as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = 'Set the {0} environment variable'.format(setting)
+        raise ImproperlyConfigured(error_msg)
 
 LOGIN_REDIRECT_URL = "view_product"
 LOGIN_URL = "/accounts/login/"
@@ -26,14 +39,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&-0shff+5-7%*gs#4f#y=@97x4cv&31*7@ugflxpt=p##jq4_+'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
+SECRET_KEY = get_secret('SECRET_KEY')
+DEBUG = bool(get_secret('DEBUG'))
+ALLOWED_HOSTS = [get_secret('ALLOWED_HOSTS')]
 
 # Application definition
 
@@ -83,26 +91,9 @@ WSGI_APPLICATION = 'online_auction_system.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'online_auction_system',
-        'USER': 'ironman',
-        'PASSWORD': 'xyz',
-        'HOST': 'localhost',
-        'OPTIONS': {
-            'autocommit': True,
-        }
-
-
-    }
-}
-#
-# db_from_env = dj_database_url.config()
-# DATABASES = {}
-# DATABASES['default'] = db_from_env
-
+DATABASES = {}
+DATABASE_URL = get_secret('DATABASE_URL')
+DATABASES['default'] = dj_database_url.config(default=DATABASE_URL, conn_max_age=500)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -131,11 +122,8 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -153,16 +141,19 @@ STATICFILES_DIRS = (
 
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'abc@gmail.com'
-EMAIL_HOST_PASSWORD = 'xyz'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_HOST_USER = get_secret('GMAIL_SMTP_USER')
+EMAIL_HOST_PASSWORD = get_secret('GMAIL_SMTP_PASSWORD')
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-AWS_QUERYSTRING_AUTH = False
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = os.environ['S3_BUCKET_NAME']
-MEDIA_URL = 'http://%s.s3.amazonaws.com/picktheproducts/' % AWS_STORAGE_BUCKET_NAME
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+# AWS_QUERYSTRING_AUTH = False
+# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
+# MEDIA_URL = 'http://%s.s3.amazonaws.com/picktheproducts/' % AWS_STORAGE_BUCKET_NAME
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+
+PAYPAL_RECEIVER_EMAIL = get_secret('PAYPAL_EMAIL')
+PAYPAL_TEST = True
